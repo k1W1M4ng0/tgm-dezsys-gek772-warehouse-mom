@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Random;
 
 /**
  * CenterController
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CenterController {
 
     public final static int PORT = 8080;
+
+    private static Random rand = new Random();
 
     @GetMapping("/")
     public String centerMain() {
@@ -28,7 +33,7 @@ public class CenterController {
         System.out.println("/warehouse/center/data");
     }
 
-    @GetMapping(value="/warehouse/center/transfer/")
+    @GetMapping(value="/warehouse/center/transfer")
     public String transferData() {
         String page = "Enter a Port where the warehouse is at.<br><br>"
             + "ex.: <a href='http://localhost:" + PORT + "/warehouse/center/transfer/8082'</a>"
@@ -38,10 +43,13 @@ public class CenterController {
     }
 
     @GetMapping(value="/warehouse/center/transfer/{port}")
-    public String transferData(@PathVariable int port) {
+    public WarehouseData transferData(@PathVariable int port) {
         System.out.println("transfer port " + port);
 
-        return "transfering";
+        String url = "http://localhost:" + port + "/warehouse/" + rand.nextInt(0, 999) + "/data";
+        WarehouseData product = new RestTemplate().getForObject(url, WarehouseData.class);
+
+        return product;
     }
     
 }
