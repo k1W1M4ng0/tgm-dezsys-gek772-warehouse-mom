@@ -6,6 +6,7 @@ import java.util.Date;
 import java.io.*;
 
 public class WarehouseData implements Serializable {
+    private static final long serialVersionUID = 12329035L;
 	
 	private String warehouseID;
 	private String warehouseName;

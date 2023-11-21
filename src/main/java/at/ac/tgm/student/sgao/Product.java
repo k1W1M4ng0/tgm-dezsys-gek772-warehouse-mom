@@ -2,6 +2,8 @@ package at.ac.tgm.student.sgao;
 import java.io.Serializable;
 
 public class Product implements Serializable {
+    private static final long serialVersionUID = 12329034L;
+
     private String productID;
     private String productName;
     private String productCategory;
