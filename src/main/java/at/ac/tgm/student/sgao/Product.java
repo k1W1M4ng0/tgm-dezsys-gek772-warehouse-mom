@@ -1,6 +1,7 @@
 package at.ac.tgm.student.sgao;
+import java.io.Serializable;
 
-public class Product {
+public class Product implements Serializable {
     private String productID;
     private String productName;
     private String productCategory;

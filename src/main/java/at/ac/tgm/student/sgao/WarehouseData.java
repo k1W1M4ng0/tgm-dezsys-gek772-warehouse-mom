@@ -3,8 +3,9 @@ package at.ac.tgm.student.sgao;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.io.*;
 
-public class WarehouseData {
+public class WarehouseData implements Serializable {
 	
 	private String warehouseID;
 	private String warehouseName;
