@@ -64,7 +64,9 @@ public class CenterController {
         logger.info("transfer port " + warehouseAddress);
 
         // get the data from the warehouse via rest call
-        String url = "http://" + warehouseAddress + "/warehouse/" + rand.nextInt(0, 999) + "/data";
+        int id = rand.nextInt(0,999);
+        logger.info("getting data from warehouse id " + id);
+        String url = "http://" + warehouseAddress + "/warehouse/" + id + "/data";
         WarehouseData data = new RestTemplate().getForObject(url, WarehouseData.class);
 
         logger.info("got data from " + warehouseAddress);
