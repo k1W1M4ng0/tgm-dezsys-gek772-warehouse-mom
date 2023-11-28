@@ -9,6 +9,9 @@ import org.springframework.web.client.RestTemplate;
 
 import at.ac.tgm.student.sgao.data.WarehouseData;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -31,8 +34,16 @@ public class CenterController {
     }
 
     @GetMapping(value="/warehouse/center/data", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void centerData() {
-        System.out.println("/warehouse/center/data");
+    public Map<String, List<WarehouseData>> centerData() {
+        Map<String, List<WarehouseData>> out = new HashMap<>();
+
+        for(String s : CentralManager.getPorts()) {
+            Receiver receiver = CentralManager.getReceiver(s);
+
+            out.put(s, receiver.receiveMessages());
+        }
+
+        return out;
     }
 
     @GetMapping(value="/warehouse/center/transfer")
@@ -45,7 +56,7 @@ public class CenterController {
     }
 
     @GetMapping(value="/warehouse/center/transfer/{warehouseAddress}")
-    public WarehouseData transferData(@PathVariable String warehouseAddress) {
+    public String transferData(@PathVariable String warehouseAddress) {
         System.out.println("transfer port " + warehouseAddress);
 
         // get the data from the warehouse via rest call
@@ -53,9 +64,9 @@ public class CenterController {
         WarehouseData data = new RestTemplate().getForObject(url, WarehouseData.class);
 
         // put the data into the queue
-        CentralManager.getSender(warehouseAddress).sendMessageToQueue()
+        CentralManager.getSender(warehouseAddress).sendMessageToQueue(data);
 
-        return data;
+        return "transferred data from " + warehouseAddress;
     }
     
 }
