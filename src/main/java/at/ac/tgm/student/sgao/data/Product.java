@@ -1,4 +1,4 @@
-package at.ac.tgm.student.sgao;
+package at.ac.tgm.student.sgao.data;
 import java.io.Serializable;
 
 public class Product implements Serializable {
