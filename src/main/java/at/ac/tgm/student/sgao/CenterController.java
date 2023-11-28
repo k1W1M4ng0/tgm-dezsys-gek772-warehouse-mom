@@ -42,14 +42,18 @@ public class CenterController {
         return page;
     }
 
-    @GetMapping(value="/warehouse/center/transfer/{port}")
-    public WarehouseData transferData(@PathVariable int port) {
-        System.out.println("transfer port " + port);
+    @GetMapping(value="/warehouse/center/transfer/{warehouseAddress}")
+    public WarehouseData transferData(@PathVariable String warehouseAddress) {
+        System.out.println("transfer port " + warehouseAddress);
 
-        String url = "http://localhost:" + port + "/warehouse/" + rand.nextInt(0, 999) + "/data";
-        WarehouseData product = new RestTemplate().getForObject(url, WarehouseData.class);
+        // get the data from the warehouse via rest call
+        String url = "http://" + warehouseAddress + "/warehouse/" + rand.nextInt(0, 999) + "/data";
+        WarehouseData data = new RestTemplate().getForObject(url, WarehouseData.class);
 
-        return product;
+        // put the data into the queue
+        CentralManager.getSender(warehouseAddress).sendMessageToQueue()
+
+        return data;
     }
     
 }

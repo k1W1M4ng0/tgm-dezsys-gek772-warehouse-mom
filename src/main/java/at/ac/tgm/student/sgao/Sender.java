@@ -18,11 +18,11 @@ public class Sender {
     private Session session = null;
     private MessageProducer producer = null;
 
-    private final String topic;
+    private final String queue;
 
-    public Sender(String topic) {
-        this.topic = topic;
-        logger.info("Sender started on topic: " + topic);
+    public Sender(String queue) {
+        this.queue = queue;
+        logger.info("Sender started on queue: " + queue);
 
         Destination destination;
         try {
@@ -33,7 +33,7 @@ public class Sender {
 
             // Create the session
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            destination = session.createTopic( this.topic );
+            destination = session.createQueue( this.queue );
 
             // Create the producer.
             producer = session.createProducer(destination);
@@ -45,10 +45,10 @@ public class Sender {
         }
     }
 
-    public void sendMessageToTopic(String message) {
+    public void sendMessageToQueue(WarehouseData message) {
         try {
-            TextMessage textMessage = session.createTextMessage(message);
-            producer.send(textMessage);
+            ObjectMessage objectMessage = session.createObjectMessage(message);
+            producer.send(objectMessage);
 
         } catch (JMSException e) {
             throw new RuntimeException(e);
