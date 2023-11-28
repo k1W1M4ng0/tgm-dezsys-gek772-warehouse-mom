@@ -36,7 +36,8 @@ public class Receiver {
 
         try {
 
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(user, password, url);
+            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(user, password, url);
+            connectionFactory.setTrustedPackages(List.of("at.ac.tgm.student.sgao.data", "java.util"));
             connection = connectionFactory.createConnection();
             connection.start();
 
@@ -60,13 +61,13 @@ public class Receiver {
         List<WarehouseData> out = new ArrayList<>();
         try {
             // Start receiving
-            ObjectMessage message = (ObjectMessage)consumer.receive();
+            ObjectMessage message = (ObjectMessage)consumer.receiveNoWait();
             while ( message != null ) {
                 logger.info("Message received");
                 out.add(message.getBody(WarehouseData.class));
 
                 message.acknowledge();
-                message = (ObjectMessage) consumer.receive();
+                message = (ObjectMessage) consumer.receiveNoWait();
             }
 
         } catch (Exception e) {

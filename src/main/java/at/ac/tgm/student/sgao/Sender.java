@@ -1,6 +1,9 @@
 package at.ac.tgm.student.sgao;
 
 import jakarta.jms.*;
+
+import java.util.List;
+
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
@@ -29,7 +32,8 @@ public class Sender {
         Destination destination;
         try {
 
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory( user, password, url );
+            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory( user, password, url );
+            connectionFactory.setTrustedPackages(List.of("at.ac.tgm.student.sgao.data", "java.util"));
             connection = connectionFactory.createConnection();
             connection.start();
 
