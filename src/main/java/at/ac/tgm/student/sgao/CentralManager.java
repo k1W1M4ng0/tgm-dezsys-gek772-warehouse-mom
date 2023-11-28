@@ -6,7 +6,7 @@ import java.util.*;
  * This class manages the senders.
  */
 public class CentralManager {
-    private class SenderReceiverPair{
+    private static class SenderReceiverPair{
         public Sender sender;
         public Receiver receiver;
         public SenderReceiverPair(Sender sender, Receiver receiver) {
@@ -38,6 +38,18 @@ public class CentralManager {
             Receiver receiver = new Receiver(queue);
             senders.put(queue, new SenderReceiverPair(sender, receiver));
             return sender;
+        }
+    }
+
+    public static Receiver getReceiver(String queue) {
+        if(senders.containsKey(queue)) {
+            return senders.get(queue).receiver;
+        }
+        else {
+            Sender sender = new Sender(queue);
+            Receiver receiver = new Receiver(queue);
+            senders.put(queue, new SenderReceiverPair(sender, receiver));
+            return receiver;
         }
     }
 }
