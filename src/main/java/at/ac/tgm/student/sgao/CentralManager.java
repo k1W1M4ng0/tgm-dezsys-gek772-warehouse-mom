@@ -15,7 +15,7 @@ public class CentralManager {
         }
     }
 
-    private static HashMap<String, SenderReceiverPair> senders;
+    private static HashMap<String, SenderReceiverPair> senders = new HashMap<>();
 
     /**
      * @return a list of queues that a sender was created for
