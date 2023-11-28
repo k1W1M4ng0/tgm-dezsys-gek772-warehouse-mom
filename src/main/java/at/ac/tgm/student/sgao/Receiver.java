@@ -1,10 +1,16 @@
 package at.ac.tgm.student.sgao;
 
 import jakarta.jms.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import at.ac.tgm.student.sgao.data.WarehouseData;
 
 public class Receiver {
 
@@ -40,9 +46,34 @@ public class Receiver {
 
             consumer = session.createConsumer(destination);
 
+
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
+    }
+
+    /**
+     * Receive all messages in form of WarehouseData and put them in a list.
+     * @return a list of received WarehouseData messages
+     */
+    public List<WarehouseData> receiveMessages() {
+        List<WarehouseData> out = new ArrayList<>();
+        try {
+            // Start receiving
+            ObjectMessage message = (ObjectMessage)consumer.receive();
+            while ( message != null ) {
+                logger.info("Message received");
+                out.add(message.getBody(WarehouseData.class));
+
+                message.acknowledge();
+                message = (ObjectMessage) consumer.receive();
+            }
+
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+
+        return out;
     }
 
     public void stop() {
