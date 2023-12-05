@@ -62,9 +62,19 @@ public class Receiver {
         try {
             // Start receiving
             ObjectMessage message = (ObjectMessage)consumer.receiveNoWait();
+            // receive everything
             while ( message != null ) {
                 logger.info("Message received");
-                out.add(message.getBody(WarehouseData.class));
+                WarehouseData data = message.getBody(WarehouseData.class);
+                out.add(data);
+                String ackMessage = 
+                    data.getWarehouseApplicationID() 
+                    + ";"
+                    + data.getWarehouseID();
+
+                CentralManager.getSender("acknowledgements")
+                    .sendTextMessageToQueue(ackMessage);
+                logger.info(String.format("Acknowledged: %s", ackMessage));
 
                 message.acknowledge();
                 message = (ObjectMessage) consumer.receiveNoWait();

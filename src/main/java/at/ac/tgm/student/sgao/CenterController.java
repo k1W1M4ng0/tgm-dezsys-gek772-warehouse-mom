@@ -33,7 +33,8 @@ public class CenterController {
     public String centerMain() {
     	String mainPage = "This is the warehouse <b>center</b> application!<br/><br/>" +
                           "<a href='http://localhost:" + PORT+ "/warehouse/center/data'>Link for getting data out of Queues</a><br/>" +
-                          "<a href='http://localhost:" + PORT+ "/warehouse/center/transfer'>Link for pulling data to save into Topics</a><br/>";
+                          "<a href='http://localhost:" + PORT+ "/warehouse/center/transfer'>Link for pulling data to save into Topics</a><br/>" +
+                          "<a href='http://localhost:" + PORT+ "/warehouse/center/activeports'>Link for getting the active warehouses that were pulled from</a><br/>";
         return mainPage;
     }
 
@@ -42,12 +43,21 @@ public class CenterController {
         Map<String, List<WarehouseData>> out = new HashMap<>();
 
         for(String s : CentralManager.getPorts()) {
+            // skip this topic
+            if(s.equals("acknowledgements")) 
+                continue;
+
             Receiver receiver = CentralManager.getReceiver(s);
 
             out.put(s, receiver.receiveMessages());
         }
 
         return out;
+    }
+
+    @GetMapping(value="/warehouse/center/activeports", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<String> activeports() {
+        return CentralManager.getPorts();
     }
 
     @GetMapping(value="/warehouse/center/transfer")

@@ -1,12 +1,10 @@
-package at.ac.tgm.student.sgao.data;
+package tradearea.model;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.io.*;
 
-public class WarehouseData implements Serializable {
-    private static final long serialVersionUID = 12329035L;
+public class WarehouseData {
 	
     private String warehouseApplicationID;
 	private String warehouseID;
@@ -24,12 +22,15 @@ public class WarehouseData implements Serializable {
 	public WarehouseData() {
 		this.productData = new ArrayList<>();
 		this.timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
-
 	}
 	
 	/**
 	 * Setter and Getter Methods
 	 */
+	public String getWarehouseID() {
+		return warehouseID;
+	}
+
 	public String getWarehouseApplicationID() {
         return warehouseApplicationID;
     }
@@ -38,11 +39,11 @@ public class WarehouseData implements Serializable {
         this.warehouseApplicationID = warehouseApplicationID;
     }
 
-	public String getWarehouseID() {
-		return warehouseID;
-	}
+    public void setProductData(ArrayList<Product> productData) {
+        this.productData = productData;
+    }
 
-	public void setWarehouseID(String warehouseID) {
+    public void setWarehouseID(String warehouseID) {
 		this.warehouseID = warehouseID;
 	}
 

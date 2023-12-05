@@ -39,7 +39,12 @@ public class Sender {
 
             // Create the session
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            destination = session.createQueue( this.queue );
+            if(queue.equals("acknowledgements")) {
+                destination = session.createTopic(this.queue);
+            }
+            else {
+                destination = session.createQueue( this.queue );
+            }
 
             // Create the producer.
             producer = session.createProducer(destination);
@@ -59,6 +64,17 @@ public class Sender {
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void sendTextMessageToQueue(String message) {
+        try {
+             TextMessage textMessage = session.createTextMessage(message);
+            producer.send(textMessage);
+
+        } catch (JMSException e) {
+            throw new RuntimeException(e);
+        }
+    
     }
 
     public void stop() {
