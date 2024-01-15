@@ -46,7 +46,7 @@ else {
 }
 ```
 
-Man muss dann das Programm mit ´./gradlew bootRun --args=8081´ bzw. 8082 starten.
+Man muss dann das Programm mit `./gradlew bootRun --args=8081` bzw. 8082 starten.
 
 Update: Weil gradle bei mir nicht funktioniert, bin ich auf maven umgestiegen.
 
